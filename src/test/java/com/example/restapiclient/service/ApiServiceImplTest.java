@@ -1,6 +1,7 @@
 package com.example.restapiclient.service;
 
 import com.example.restapiclient.model.Category;
+import com.example.restapiclient.model.Order;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,4 +24,11 @@ public class ApiServiceImplTest {
         List<Category> list = apiService.getCategories();
         assertEquals(5, list.size());
     }
+
+    @Test
+    public void getOrders(){
+        List<Order> orders = apiService.getOrders();
+        assertNotNull(orders);
+    }
+
 }
