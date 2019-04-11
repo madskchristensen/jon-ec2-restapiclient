@@ -34,6 +34,7 @@ public class ApiServiceImpl implements ApiService {
     public List<Order> getOrders(){
         val path = API_ROOT + "orders/";
         Orders orders = restTemplate.getForObject(path, Orders.class);
+
         System.out.println(orders.getOrders());
         for (Order order:orders.getOrders()) {
             System.out.println("Order:" + order.getCreatedAt());
