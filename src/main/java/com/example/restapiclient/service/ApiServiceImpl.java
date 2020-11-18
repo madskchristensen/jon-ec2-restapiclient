@@ -15,11 +15,12 @@ import java.util.List;
 @Service
 public class ApiServiceImpl implements ApiService {
 
-    final String API_ROOT = "http://localhost:9091";
+    final String API_ROOT = "http://product-service";
+    final String API_PORT = "9091";
     RestTemplate restTemplate = new RestTemplate();
     @Override
     public List<String> getProducts() {
-        String path = API_ROOT + "api/search";
+        String path = API_ROOT + ":" + API_PORT + "/api/search";
         AJAXrequest req = new AJAXrequest();
         JsonNode jsonNode = restTemplate.postForObject(path, req, JsonNode.class);
         System.out.println("received answer " + jsonNode.toString());
