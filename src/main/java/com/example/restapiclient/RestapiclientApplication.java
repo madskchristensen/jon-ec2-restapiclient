@@ -9,5 +9,4 @@ public class RestapiclientApplication {
     public static void main(String[] args) {
         SpringApplication.run(RestapiclientApplication.class, args);
     }
-
 }

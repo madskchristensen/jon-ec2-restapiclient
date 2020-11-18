@@ -1,44 +1,38 @@
 package com.example.restapiclient.service;
 
-import com.example.restapiclient.model.Category;
-import com.example.restapiclient.model.Order;
-import com.example.restapiclient.model.Orders;
+import com.example.restapiclient.model.AJAXrequest;
 import com.fasterxml.jackson.databind.JsonNode;
-import lombok.val;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.DataInput;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class ApiServiceImpl implements ApiService {
 
-    final String API_ROOT = "https://api.predic8.de:443/shop/";
+    final String API_ROOT = "http://localhost:9091";
     RestTemplate restTemplate = new RestTemplate();
     @Override
-    public List<Category> getCategories() {
-        String path = API_ROOT + "categories/";
-
-        JsonNode jsonNode = restTemplate.getForObject(path, JsonNode.class);
-        JsonNode categories = jsonNode.get("categories");
-        List<Category> list = new ArrayList<>();
-        categories.iterator().forEachRemaining(cat -> {
-            if (cat.get("name") != null){
-                list.add(new Category(cat.get("name").asText(),cat.get("category_url").asText()));
-            }
-        });
-        return list;
-    }
-
-    public List<Order> getOrders(){
-        val path = API_ROOT + "orders/";
-        Orders orders = restTemplate.getForObject(path, Orders.class);
-
-        System.out.println(orders.getOrders());
-        for (Order order:orders.getOrders()) {
-            System.out.println("Order:" + order.getCreatedAt());
+    public List<String> getProducts() {
+        String path = API_ROOT + "api/search";
+        AJAXrequest req = new AJAXrequest();
+        JsonNode jsonNode = restTemplate.postForObject(path, req, JsonNode.class);
+        System.out.println("received answer " + jsonNode.toString());
+        JsonNode list_ = jsonNode.get("products");
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<String> result = new ArrayList<>();
+        try {
+            String[] l = objectMapper.readValue(list_.toString(), String[].class);
+            result.addAll(Arrays.asList(l));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return null;
+        return result;
     }
+
 }
